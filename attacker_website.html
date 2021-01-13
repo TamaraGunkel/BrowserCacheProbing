@@ -1,0 +1,72 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cache Attack</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+            integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div style="width: 49%; display: inline-block">
+    <div>
+        <img src="https://images.pexels.com/photos/288101/pexels-photo-288101.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+             width="100" height="100">
+        <img src="https://images.pexels.com/photos/831890/pexels-photo-831890.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+             width="100" height="100">
+        <img src="https://images.pexels.com/photos/1635905/pexels-photo-1635905.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+             width="100" height="100">
+        <img src="https://images.pexels.com/photos/1662242/pexels-photo-1662242.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+             width="100" height="100">
+        <img src="https://images.pexels.com/photos/3694341/pexels-photo-3694341.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+             width="100" height="100">
+        <img src="https://images.pexels.com/photos/755858/pexels-photo-755858.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+             width="100" height="100">
+    </div>
+    <div>
+        <img src="x" id="imgL1" width="100" height="100">
+        <img src="x" id="imgL2" width="100" height="100">
+        <img src="x" id="imgL3" width="100" height="100">
+        <img src="x" id="imgL4" width="100" height="100">
+        <img src="x" id="imgL5" width="100" height="100">
+        <img src="x" id="imgL6" width="100" height="100">
+    </div>
+
+    <button id="btnTimeCache" style="display: block">Get Cache Hit Time</button>
+    <p id="time_cached"></p>
+</div>
+<div style="width: 49%; display: inline-block">
+    <div>
+        <img src="x" width="100" height="100">
+        <img src="x" width="100" height="100">
+        <img src="x" width="100" height="100">
+        <img src="x" width="100" height="100">
+        <img src="x" width="100" height="100">
+        <img src="x" width="100" height="100">
+    </div>
+    <div>
+        <img src="x" id="img1" width="100" height="100">
+        <img src="x" id="img2" width="100" height="100">
+        <img src="x" id="img3" width="100" height="100">
+        <img src="x" id="img4" width="100" height="100">
+        <img src="x" id="img5" width="100" height="100">
+        <img src="x" id="img6" width="100" height="100">
+    </div>
+    <button id="btnTimeNotCached" style="display: block">Get Cache Miss Time</button>
+    <p id="time_not_cached"></p>
+</div>
+<div style="width: 50%">
+    <canvas id="chart"></canvas>
+</div>
+
+<p id="boundary"></p>
+<button id="btnCreateProfile">Create Profile</button>
+
+<p id="learnweb">Learnweb: <span></span></p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="create_profile.js"></script>
+</body>
+</html>
